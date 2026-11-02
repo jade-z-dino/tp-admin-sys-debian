@@ -34,3 +34,6 @@ install -m 644 -o root -g root "$DEPOT/config/ssh/sshd_config.d/10-durcissement.
 install -m 644 -o root -g root "$DEPOT/config/profile.d/timeout.sh" /etc/profile.d/timeout.sh
 sshd -t
 systemctl restart ssh
+
+log "Verrouillage du compte root"
+passwd -l root
