@@ -67,3 +67,18 @@ systemctl start apt-daily-upgrade.timer
 
 # J4 : analyse_logs.sh
 install -m 750 -o root -g root analyse_logs.sh /usr/local/sbin/analyse_logs.sh
+
+# --- B1/B3 : disque de sauvegarde ---
+DISQUE_SAUV="/dev/sdb"
+mkdir -p /mnt/sauvegardes
+if ! blkid "$DISQUE_SAUV" > /dev/null 2>&1; then
+  mkfs.ext4 -L sauvegardes "$DISQUE_SAUV"
+fi
+UUID_SAUV="$(blkid -s UUID -o value "$DISQUE_SAUV")"
+if ! grep -q "$UUID_SAUV" /etc/fstab; then
+  echo "UUID=$UUID_SAUV /mnt/sauvegardes ext4 defaults,nofail 0 2" >> /etc/fstab
+  systemctl daemon-reload
+fi
+mountpoint -q /mnt/sauvegardes || mount /mnt/sauvegardes
+chown root:admins /mnt/sauvegardes
+chmod 750 /mnt/sauvegardes

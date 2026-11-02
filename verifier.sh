@@ -178,6 +178,11 @@ test_S5() {
 
 # NOUVEAUX TESTS 
 
+test_B3() {
+  [[ "$(stat -c '%U:%G:%a' /mnt/sauvegardes 2> /dev/null)" == "root:admins:750" ]] || erreur "/mnt/sauvegardes devrait etre root:admins en 750"
+  bilan B3 "sauvegardes reservees aux administrateurs" "droits incorrects sur /mnt/sauvegardes"
+}
+
 test_J4() {
   local script="/usr/local/sbin/analyse_logs.sh" code
   [[ -x "$script" ]] || erreur "$script absent ou non executable"
