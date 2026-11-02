@@ -12,7 +12,7 @@ Chercheurs : lecture/écriturre
 doctorant : lecure             lecture/écriture
 invite : -
 
-#Prérequis
+## Prérequis
 
 - Vm Debian 13 vierge et installation minimal
 - Second disque virtuel pour les sauvegardes
@@ -30,17 +30,17 @@ vérifier.sh : Teste chaque exigence et affiche '[OK]'
 config/ : Fichiers de configuration (SHH, sudoers,nftables, fail2ban,journald, clé publique)
 Dossier.md : Conformité, chhoix techniques, défense et restauratiion
 
-#installation 
+## installation 
 
 git clone github.com/jade-z-dino/tp-admin-sys-debian
 cd tp-admin-sys-debian
 sudo ./installer.sh
 
-##Verification
+## Verification
 
 sudo ./verifier.sh
 
-##Sécurité
+## Sécurité
 
 Aucun mot de passe ni clé privé dabs ce dépot : seules les clés publiques sont versionnées
 
