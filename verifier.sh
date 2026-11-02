@@ -239,6 +239,12 @@ test_J1() {
   bilan J1 "fail2ban actif avec la jail sshd" "fail2ban ou jail sshd absents"
 }
 # Lancement : toute fonction dont le nom commence par test
+
+test_B4() {
+  grep -qi 'restauration' "$DEPOT/DOSSIER.md" 2> /dev/null || erreur "procedure de restauration absente de DOSSIER.md"
+  cmp -s /etc/hostname /mnt/sauvegardes/latest/etc/hostname || erreur "un fichier de la sauvegarde differe de l'original"
+  bilan B4 "restauration documentee, fichier de la sauvegarde identique" "restauration non documentee ou fichier different"
+}
 for fonction in $(declare -F | awk '{print $3}' | grep '^test_' | sort); do
   "$fonction"
 done
