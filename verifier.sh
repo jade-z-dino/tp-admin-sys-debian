@@ -177,6 +177,12 @@ test_S5() {
 }
 
 # NOUVEAUX TESTS 
+
+test_J1() {
+  systemctl is-active --quiet fail2ban || erreur "fail2ban n'est pas actif"
+  fail2ban-client status sshd > /dev/null 2>&1 || erreur "la jail sshd n'est pas active"
+  bilan J1 "fail2ban actif avec la jail sshd" "fail2ban ou jail sshd absents"
+}
 # Lancement : toute fonction dont le nom commence par test
 for fonction in $(declare -F | awk '{print $3}' | grep '^test_' | sort); do
   "$fonction"
