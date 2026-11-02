@@ -178,6 +178,17 @@ test_S5() {
 
 # NOUVEAUX TESTS 
 
+test_J4() {
+  local script="/usr/local/sbin/analyse_logs.sh" code
+  [[ -x "$script" ]] || erreur "$script absent ou non executable"
+  [[ "$(stat -c '%U:%a' "$script" 2> /dev/null)" == "root:750" ]] || erreur "$script devrait etre root:750"
+  SEUIL_ECHECS=0 "$script" > /dev/null 2>&1; code=$?
+  [[ $code -eq 1 ]] || erreur "seuil 0 : code $code (attendu 1)"
+  SEUIL_ECHECS=999999 "$script" > /dev/null 2>&1; code=$?
+  [[ $code -eq 0 ]] || erreur "seuil enorme : code $code (attendu 0)"
+  bilan J4 "analyse_logs.sh : rapport et code de sortie selon le seuil" "analyse_logs.sh incorrect"
+}
+
 test_D1() {
   dpkg -s unattended-upgrades > /dev/null 2>&1 || erreur "paquet unattended-upgrades absent"
   grep -qs 'Unattended-Upgrade "1"' /etc/apt/apt.conf.d/20auto-upgrades || erreur "20auto-upgrades ne l'active pas"

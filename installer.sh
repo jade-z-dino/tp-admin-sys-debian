@@ -44,19 +44,19 @@ install -m 644 -o root -g root config/fail2ban/jail.d/sshd.conf /etc/fail2ban/ja
 systemctl enable fail2ban
 systemctl restart fail2ban
 
-# --- J2 : pare-feu nftables ---
+# J2 : pare-feu nftables
 install -m 644 -o root -g root config/nftables.conf /etc/nftables.conf
 nft -c -f /etc/nftables.conf
 systemctl enable nftables
 systemctl restart nftables
 systemctl restart fail2ban
 
-# --- J3 : journal persistant ---
+# J3 : journal persistant
 mkdir -p /etc/systemd/journald.conf.d /var/log/journal
 install -m 644 -o root -g root config/journald.conf /etc/systemd/journald.conf.d/10-persistant.conf
 systemctl restart systemd-journald
 
-# --- D1 : mises a jour de securite automatiques ---
+# D1 : mises a jour de securite automatiques
 apt-get install -y unattended-upgrades
 cat > /etc/apt/apt.conf.d/20auto-upgrades << 'CONF'
 APT::Periodic::Update-Package-Lists "1";
@@ -64,3 +64,6 @@ APT::Periodic::Unattended-Upgrade "1";
 CONF
 systemctl enable apt-daily-upgrade.timer
 systemctl start apt-daily-upgrade.timer
+
+# J4 : analyse_logs.sh
+install -m 750 -o root -g root analyse_logs.sh /usr/local/sbin/analyse_logs.sh
