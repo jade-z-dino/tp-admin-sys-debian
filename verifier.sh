@@ -178,6 +178,12 @@ test_S5() {
 
 # NOUVEAUX TESTS 
 
+test_J3() {
+  grep -rqs '^Storage=persistent' /etc/systemd/journald.conf /etc/systemd/journald.conf.d/ || erreur "Storage=persistent absent"
+  [[ -d /var/log/journal ]] || erreur "/var/log/journal n'existe pas"
+  bilan J3 "journal systeme persistant" "journal non persistant"
+}
+
 test_J2() {
   nft list chain inet filter input 2> /dev/null | grep -q 'policy drop' || erreur "politique par defaut de input : pas drop"
   nft list chain inet filter input 2> /dev/null | grep -q 'dport 22' || erreur "SSH (port 22) non autorise"

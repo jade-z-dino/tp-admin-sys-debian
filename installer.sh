@@ -50,3 +50,8 @@ nft -c -f /etc/nftables.conf
 systemctl enable nftables
 systemctl restart nftables
 systemctl restart fail2ban
+
+# --- J3 : journal persistant ---
+mkdir -p /etc/systemd/journald.conf.d /var/log/journal
+install -m 644 -o root -g root config/journald.conf /etc/systemd/journald.conf.d/10-persistant.conf
+systemctl restart systemd-journald
