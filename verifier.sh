@@ -178,6 +178,13 @@ test_S5() {
 
 # NOUVEAUX TESTS 
 
+test_D1() {
+  dpkg -s unattended-upgrades > /dev/null 2>&1 || erreur "paquet unattended-upgrades absent"
+  grep -qs 'Unattended-Upgrade "1"' /etc/apt/apt.conf.d/20auto-upgrades || erreur "20auto-upgrades ne l'active pas"
+  systemctl is-enabled --quiet apt-daily-upgrade.timer || erreur "timer apt-daily-upgrade inactif"
+  bilan D1 "mises a jour de securite automatiques" "mises a jour automatiques non configurees"
+}
+
 test_J3() {
   grep -rqs '^Storage=persistent' /etc/systemd/journald.conf /etc/systemd/journald.conf.d/ || erreur "Storage=persistent absent"
   [[ -d /var/log/journal ]] || erreur "/var/log/journal n'existe pas"

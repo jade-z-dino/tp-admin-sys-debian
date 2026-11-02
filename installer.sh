@@ -55,3 +55,12 @@ systemctl restart fail2ban
 mkdir -p /etc/systemd/journald.conf.d /var/log/journal
 install -m 644 -o root -g root config/journald.conf /etc/systemd/journald.conf.d/10-persistant.conf
 systemctl restart systemd-journald
+
+# --- D1 : mises a jour de securite automatiques ---
+apt-get install -y unattended-upgrades
+cat > /etc/apt/apt.conf.d/20auto-upgrades << 'CONF'
+APT::Periodic::Update-Package-Lists "1";
+APT::Periodic::Unattended-Upgrade "1";
+CONF
+systemctl enable apt-daily-upgrade.timer
+systemctl start apt-daily-upgrade.timer
