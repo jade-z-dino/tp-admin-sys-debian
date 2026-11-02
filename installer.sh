@@ -101,7 +101,7 @@ systemctl enable nftables
 systemctl restart nftables
 systemctl restart fail2ban
 
-# --- D2 : aucun service reseau en dehors de SSH ---
+# D2 : aucun service reseau en dehors de SSH
 log "Suppression d'Apache s'il est present"
 if dpkg -s apache2 > /dev/null 2>&1; then
   systemctl disable --now apache2 || true
