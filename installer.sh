@@ -17,3 +17,20 @@ apt-get install -y -qq sudo acl rsync openssh-server fail2ban python3-systemd nf
 # --- Comptes, groupes, /srv, ACL, cles (C1, C2) ---
 log "Creation des comptes"
 "$DEPOT/creer_comptes.sh"
+log "Configuration de sudo"
+visudo -cf "$DEPOT/config/sudoers.d/admins"
+visudo -cf "$DEPOT/config/sudoers.d/support"
+install -m 440 -o root -g root "$DEPOT/config/sudoers.d/admins" /etc/sudoers.d/admins
+install -m 440 -o root -g root "$DEPOT/config/sudoers.d/support" /etc/sudoers.d/support
+install -m 750 -o root -g root "$DEPOT/analyse_logs.sh" /usr/local/sbin/analyse_logs.sh
+
+for u in $(getent group sudo | cut -d: -f4 | tr ',' ' '); do
+  log "retrait de $u du groupe sudo"
+  gpasswd -d "$u" sudo
+done
+
+log "Configuration de SSH"
+install -m 644 -o root -g root "$DEPOT/config/ssh/sshd_config.d/10-durcissement.conf" /etc/ssh/sshd_config.d/10-durcissement.conf
+install -m 644 -o root -g root "$DEPOT/config/profile.d/timeout.sh" /etc/profile.d/timeout.sh
+sshd -t
+systemctl restart ssh
