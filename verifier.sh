@@ -245,6 +245,15 @@ test_B4() {
   cmp -s /etc/hostname /mnt/sauvegardes/latest/etc/hostname || erreur "un fichier de la sauvegarde differe de l'original"
   bilan B4 "restauration documentee, fichier de la sauvegarde identique" "restauration non documentee ou fichier different"
 }
+
+test_J2() {
+  nft list chain inet filter input 2> /dev/null | grep -q 'policy drop' || erreur "politique par defaut de input : pas drop"
+  nft list chain inet filter input 2> /dev/null | grep -q 'dport 22' || erreur "SSH (port 22) non autorise"
+  bilan J2 "pare-feu : tout refuse par defaut, seul SSH est autorise" "pare-feu mal configure"
+  systemctl is-enabled --quiet nftables || erreur "nftables n'est pas active au demarrage"
+  nft list tables 2> /dev/null | grep -q 'f2b' || erreur "la table de fail2ban est absente"
+  bilan J2 "nftables persistant, regles fail2ban presentes" "nftables non persistant ou regles fail2ban perdues"
+}
 for fonction in $(declare -F | awk '{print $3}' | grep '^test_' | sort); do
   "$fonction"
 done

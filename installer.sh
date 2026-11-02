@@ -92,3 +92,11 @@ install -m 644 -o root -g root "$DEPOT/config/systemd/sauvegarde.service" /etc/s
 install -m 644 -o root -g root "$DEPOT/config/systemd/sauvegarde.timer" /etc/systemd/system/sauvegarde.timer
 systemctl daemon-reload
 systemctl enable --now sauvegarde.timer
+
+# J2 : pare-feu nftables
+log "Configuration du pare-feu"
+install -m 644 -o root -g root "$DEPOT/config/nftables.conf" /etc/nftables.conf
+nft -c -f /etc/nftables.conf
+systemctl enable nftables
+systemctl restart nftables
+systemctl restart fail2ban
