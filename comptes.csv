@@ -1,0 +1,12 @@
+login;nom;groupe_principal;groupes_secondaires
+jade;jade linot;admins;acces_ssh
+aissata;aissata saounera;admins;acces_ssh
+support;Compte support;support;acces_ssh
+tdurand;Thomas Durand;technique;
+smoreau;Sophie Moreau;technique;
+cleroy;Camille Leroy;chercheurs;
+nbenali;Nadia Benali;chercheurs;
+ypetit;Yann Petit;doctorants;
+ilopez;Inès Lopez;doctorants;
+invite1;Invité Un;invite;acces_ssh
+invite2;Invité Deux;invite;acces_ssh
