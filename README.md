@@ -1,7 +1,7 @@
-#Projet administatrion système avancées et scripting
+##Projet administatrion système avancées et scripting
 Auteur : Jade Linot, Aissata Saounera
 
-## Contexte C :La boratoire Biolab. Serveur débian 13 à durcir avec quatre différent 
+## Contexte C :Laboratoire Biolab. Serveur débian 13 à durcir avec quatre différent 
 groupe : Technique, Chercheurs, Doctorants, Invite
 
 Note: Les membre de invite n'ont pas de shell interactif et ne peuvent que récupérer des ficher via SFTP.
