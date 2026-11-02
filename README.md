@@ -1,4 +1,4 @@
-##Projet administatrion système avancées et scripting
+## Projet administatrion système avancées et scripting
 Auteur : Jade Linot, Aissata Saounera
 
 ## Contexte C :Laboratoire Biolab. Serveur débian 13 à durcir avec quatre différent 
