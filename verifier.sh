@@ -73,8 +73,7 @@ test_C1_invite() {
     shell="$(getent passwd "$login" | cut -d: -f7)"
     [[ "$shell" == */nologin ]] || erreur "$login a un shell ($shell)"
   done < <(tail -n +2 "$CSV" | tr -d '\r')
-  sshd -T -C "user=$(un_membre invite),host=localhost,addr=127.0.0.1" 2>
-  /dev/null | grep -qi '^forcecommand internal-sftp' || erreur "invite n'est pas limite au SFTP"
+  sshd -T -C "user=$(un_membre invite),host=localhost,addr=127.0.0.1" 2>/dev/null | grep -qi '^forcecommand internal-sftp' || erreur "invite n'est pas limite au SFTP"
     bilan C1 "invite : nologin et SFTP uniquement" "invite : shell ou SFTP mal configure"
 }
 
@@ -107,7 +106,8 @@ test_C2() {
   sudo -u "$d" test -w "$f" || erreur "un doctorant ne peut pas ecrire dans un fichier cree par un chercheur"
   if sudo -u "$t" test -r "$f"; then erreur "technique peut lire/srv/analyses"; fi
 rm -f "$f"
-bilan C2 "ACL par defaut appliquees aux nouveaux fichiers" "ACL par defaut absentes ou incorrectes" }
+bilan C2 "ACL par defaut appliquees aux nouveaux fichiers" "ACL par defaut absentes ou incorrectes" 
+}
 
 test_C3() {
   local login nom gp gs sortie
