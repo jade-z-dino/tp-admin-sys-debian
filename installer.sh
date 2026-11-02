@@ -100,3 +100,11 @@ nft -c -f /etc/nftables.conf
 systemctl enable nftables
 systemctl restart nftables
 systemctl restart fail2ban
+
+# --- D2 : aucun service reseau en dehors de SSH ---
+log "Suppression d'Apache s'il est present"
+if dpkg -s apache2 > /dev/null 2>&1; then
+  systemctl disable --now apache2 || true
+  apt-get purge -y apache2 apache2-bin apache2-data apache2-utils
+  apt-get autoremove -y
+fi

@@ -254,6 +254,24 @@ test_J2() {
   nft list tables 2> /dev/null | grep -q 'f2b' || erreur "la table de fail2ban est absente"
   bilan J2 "nftables persistant, regles fail2ban presentes" "nftables non persistant ou regles fail2ban perdues"
 }
+
+test_D2() {
+  local ecoutes
+  ecoutes="$(ss -tulnH | awk '{print $5}' | grep -Ev '^(127[.]|[[]::1[]])' | grep -Ev ':(22|68|546)$' || true)"
+  [[ -z "$ecoutes" ]] || erreur "ecoutes reseau inattendues : $ecoutes"
+  bilan D2 "seul SSH est joignable depuis le reseau (DHCP client mis a part)" "services a l'ecoute en plus de SSH"
+}
+
+test_D3() {
+  local ww f
+  ww="$({ find / -xdev -type f -perm -0002; find / -xdev -type d -perm -0002 ! -perm -1000; } 2> /dev/null | grep -Ev '^/(tmp|var/tmp|dev/shm)/' || true)"
+  [[ -z "$ww" ]] || erreur "modifiable par tous : $(echo "$ww" | head -3)"
+  bilan D3 "aucun fichier modifiable par tous (hors tmp)" "fichiers modifiables par tous"
+  while read -r f; do
+    grep -q "$(basename "$f")" "$DEPOT/DOSSIER.md" 2> /dev/null || erreur "SUID non explique dans DOSSIER.md : $f"
+  done < <(find / -xdev -type f -perm -4000 2> /dev/null)
+  bilan D3 "tous les fichiers SUID sont expliques dans DOSSIER.md" "fichiers SUID non documentes"
+}
 for fonction in $(declare -F | awk '{print $3}' | grep '^test_' | sort); do
   "$fonction"
 done
