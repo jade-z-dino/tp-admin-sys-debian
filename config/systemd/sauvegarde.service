@@ -1,0 +1,7 @@
+[Unit]
+Description=Sauvegarde incrementale de /srv et /etc
+RequiresMountsFor=/mnt/sauvegardes
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/sauvegarde.sh

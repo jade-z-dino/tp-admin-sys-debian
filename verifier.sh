@@ -178,6 +178,12 @@ test_S5() {
 
 # NOUVEAUX TESTS 
 
+test_B2() {
+  systemctl is-enabled --quiet sauvegarde.timer || erreur "sauvegarde.timer non active"
+  systemctl is-active --quiet sauvegarde.timer || erreur "sauvegarde.timer non demarre"
+  bilan B2 "sauvegarde planifiee (timer systemd, journalisee)" "sauvegarde non planifiee"
+}
+
 test_B1() {
   local nb
   nb="$(find /mnt/sauvegardes -mindepth 1 -maxdepth 1 -type d -name '20*' 2> /dev/null | wc -l)"

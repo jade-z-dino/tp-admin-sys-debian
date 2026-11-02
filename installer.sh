@@ -86,3 +86,9 @@ chmod 750 /mnt/sauvegardes
 # B1 : sauvegarde.sh
 apt-get install -y rsync
 install -m 750 -o root -g root sauvegarde.sh /usr/local/sbin/sauvegarde.sh
+
+# B2 : planification de la sauvegarde
+install -m 644 -o root -g root "$DEPOT/config/systemd/sauvegarde.service" /etc/systemd/system/sauvegarde.service
+install -m 644 -o root -g root "$DEPOT/config/systemd/sauvegarde.timer" /etc/systemd/system/sauvegarde.timer
+systemctl daemon-reload
+systemctl enable --now sauvegarde.timer
