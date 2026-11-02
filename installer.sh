@@ -82,3 +82,7 @@ fi
 mountpoint -q /mnt/sauvegardes || mount /mnt/sauvegardes
 chown root:admins /mnt/sauvegardes
 chmod 750 /mnt/sauvegardes
+
+# B1 : sauvegarde.sh
+apt-get install -y rsync
+install -m 750 -o root -g root sauvegarde.sh /usr/local/sbin/sauvegarde.sh

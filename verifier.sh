@@ -178,6 +178,17 @@ test_S5() {
 
 # NOUVEAUX TESTS 
 
+test_B1() {
+  local nb
+  nb="$(find /mnt/sauvegardes -mindepth 1 -maxdepth 1 -type d -name '20*' 2> /dev/null | wc -l)"
+  mountpoint -q /mnt/sauvegardes || erreur "le disque de sauvegarde n'est pas monte"
+  [[ -x /usr/local/sbin/sauvegarde.sh ]] || erreur "sauvegarde.sh absent"
+  (( nb >= 1 )) || erreur "aucune version de sauvegarde (lance sauvegarde.sh)"
+  grep -q -- '--link-dest' /usr/local/sbin/sauvegarde.sh 2> /dev/null || erreur "sauvegarde non incrementale (pas de --link-dest)"
+  diff <(getfacl -p /srv/analyses 2> /dev/null | grep -v '^# file') <(getfacl -p /mnt/sauvegardes/latest/srv/analyses 2> /dev/null | grep -v '^# file') > /dev/null || erreur "ACL de /srv/analyses non conservees dans la derniere version"
+  bilan B1 "sauvegarde incrementale datee avec ACL ($nb version(s))" "sauvegarde absente ou incomplete"
+}
+
 test_B3() {
   [[ "$(stat -c '%U:%G:%a' /mnt/sauvegardes 2> /dev/null)" == "root:admins:750" ]] || erreur "/mnt/sauvegardes devrait etre root:admins en 750"
   bilan B3 "sauvegardes reservees aux administrateurs" "droits incorrects sur /mnt/sauvegardes"
