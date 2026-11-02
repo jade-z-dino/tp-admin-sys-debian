@@ -43,3 +43,10 @@ apt-get install -y fail2ban python3-systemd nftables
 install -m 644 -o root -g root config/fail2ban/jail.d/sshd.conf /etc/fail2ban/jail.d/sshd.conf
 systemctl enable fail2ban
 systemctl restart fail2ban
+
+# --- J2 : pare-feu nftables ---
+install -m 644 -o root -g root config/nftables.conf /etc/nftables.conf
+nft -c -f /etc/nftables.conf
+systemctl enable nftables
+systemctl restart nftables
+systemctl restart fail2ban

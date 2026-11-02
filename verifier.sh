@@ -178,6 +178,15 @@ test_S5() {
 
 # NOUVEAUX TESTS 
 
+test_J2() {
+  nft list chain inet filter input 2> /dev/null | grep -q 'policy drop' || erreur "politique par defaut de input : pas drop"
+  nft list chain inet filter input 2> /dev/null | grep -q 'dport 22' || erreur "SSH (port 22) non autorise"
+  bilan J2 "pare-feu : tout refuse par defaut, seul SSH est autorise" "pare-feu mal configure"
+  systemctl is-enabled --quiet nftables || erreur "nftables n'est pas active au demarrage"
+  fail2ban-client get sshd actions 2> /dev/null | grep -qi 'nftables' || erreur "fail2ban n'utilise pas l'action nftables"
+  bilan J2 "nftables persistant, fail2ban branche sur nftables" "nftables non persistant ou fail2ban mal branche"
+}
+
 test_J1() {
   systemctl is-active --quiet fail2ban || erreur "fail2ban n'est pas actif"
   fail2ban-client status sshd > /dev/null 2>&1 || erreur "la jail sshd n'est pas active"
